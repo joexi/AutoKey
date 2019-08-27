@@ -2,3 +2,6 @@ Library/
 obj/
 AutoKey-master.sln
 Assembly-CSharp.csproj
+Temp/
+AutoKey.sln
+.vs/

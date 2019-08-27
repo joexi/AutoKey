@@ -11,11 +11,26 @@ public class Test : MonoBehaviour
 
     [DllImport("user32.dll")]
     private static extern int SetCursorPos(int x, int y);
+
     [DllImport("user32.dll")]
     static extern void mouse_event(MouseEventFlag flags, int dx, int dy, uint data, UIntPtr extraInfo);
 
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
 
-    //下面这个枚举也来自user32.dll
+    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    static extern IntPtr FindWindow(string strClass, string strWindow);
+
+    [DllImport("user32.dll", EntryPoint = "ShowWindow", CharSet = CharSet.Auto)]
+    public static extern int ShowWindow(IntPtr hwnd, int nCmdShow);
+
+    [DllImport("user32.dll", EntryPoint = "keybd_event")]
+    public static extern void Keybd_event(byte bvk, byte bScan, int dwFlags, int dwExtraInfo);
+
+    private float time = 0;
+    private bool running = false;
+    private string windowName = "魔兽世界";
+
     [Flags]
     enum MouseEventFlag : uint
     {
@@ -32,21 +47,7 @@ public class Test : MonoBehaviour
         VirtualDesk = 0x4000,
         Absolute = 0x8000
     }
-
-
-
-    [DllImport("user32.dll", EntryPoint = "keybd_event")]
-    public static extern void Keybd_event(
-           byte bvk,
-           byte bScan,
-           int dwFlags,
-           int dwExtraInfo
-           );
-
-
-    float time = 0;
-    bool running = false;
-
+    
     void Start()
     {
         UnityEngine.Application.targetFrameRate = 30;
@@ -55,8 +56,19 @@ public class Test : MonoBehaviour
     void ClickKey(KeyCode code)
     {
         Keybd_event((byte)code, 0, 0, 0);
-        //Keybd_event((byte)code, 0, 1, 0);
         Keybd_event((byte)code, 0, 2, 0);
+    }
+   
+    void ShowWindow() {
+
+        IntPtr myIntPtr = FindWindow(null, windowName);
+        SetForegroundWindow(myIntPtr);
+    }
+
+    void HideWindow()
+    {
+        IntPtr myIntPtr = FindWindow(null, windowName);
+        ShowWindow(myIntPtr, 2);
     }
 
     void Update()
@@ -66,7 +78,9 @@ public class Test : MonoBehaviour
         if (time < 0)
         {
             time = UnityEngine.Random.Range(3, 5);
+            ShowWindow();
             ClickKey(KeyCode.Alpha2);
+            HideWindow();
         }
 
         if (Input.GetKey(KeyCode.Space))
