@@ -79,11 +79,11 @@ public class Test : MonoBehaviour
         {
             time = UnityEngine.Random.Range(3, 5);
             ShowWindow();
-            ClickKey(KeyCode.Alpha2);
+            ClickKey(KeyCode.Space);
             HideWindow();
         }
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Escape))
         {
             running = !running;
         }
