@@ -68,7 +68,7 @@ public class AutoJob {
         IntPtr myIntPtr = FindWindow(null, "魔兽世界");
         Debug.LogError(myIntPtr);
         SendMessage(myIntPtr, WM_KEYDOWN, (uint)code, 0);
-        System.Threading.Thread.Sleep(100);
+        System.Threading.Thread.Sleep(100 + UnityEngine.Random.Range(20, 100));
         SendMessage(myIntPtr, WM_KEYUP, (uint)code, 0);
         //Keybd_event((byte)code, 0, 0, 0);
         //Keybd_event((byte)code, 0, 2, 0);
