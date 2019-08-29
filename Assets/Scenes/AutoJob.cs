@@ -7,8 +7,8 @@ using System.Windows.Forms;
 
 public class AutoJob {
     public string WindowName = "魔兽世界";
-    public bool IfShow = true;
-    public bool IfHide = true;
+    public bool IfShow = false;
+    public bool IfHide = false;
     public Action Job;
     public float RandomMax = 10;
     public float RandomMin = 18;
@@ -35,10 +35,10 @@ public class AutoJob {
         {
             Job();
         }
-        //if (IfHide)
-        //{
-        //    HideWindow();
-        //}
+        if (IfHide)
+        {
+            HideWindow();
+        }
     }
 
     void ActiveWindow()
@@ -54,10 +54,24 @@ public class AutoJob {
         ShowWindow(myIntPtr, 2);
     }
 
+    public static void BringWindowToTop(string windowName)
+    {
+        IntPtr myIntPtr = FindWindow(null, windowName);
+        BringWindowToTop(myIntPtr);
+    }
+
+    const int WM_KEYDOWN = 0x100;
+    const int WM_KEYUP = 0x101;
     public static void ClickKey(KeyCode code)
     {
-        Keybd_event((byte)code, 0, 0, 0);
-        Keybd_event((byte)code, 0, 2, 0);
+
+        IntPtr myIntPtr = FindWindow(null, "魔兽世界");
+        Debug.LogError(myIntPtr);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)code, 0);
+        System.Threading.Thread.Sleep(100);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)code, 0);
+        //Keybd_event((byte)code, 0, 0, 0);
+        //Keybd_event((byte)code, 0, 2, 0);
     }
 
     [Flags]
@@ -81,7 +95,8 @@ public class AutoJob {
     public static extern int SetCursorPos(int x, int y);
 
     [DllImport("user32.dll")]
-    public static extern void mouse_event(MouseEventFlag flags, int dx, int dy, uint data, UIntPtr extraInfo);
+    //public static extern void mouse_event(MouseEventFlag flags, int dx, int dy, uint data, UIntPtr extraInfo);
+    public static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
 
     [DllImport("user32.dll")]
     private static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -94,4 +109,27 @@ public class AutoJob {
 
     [DllImport("user32.dll", EntryPoint = "keybd_event")]
     public static extern void Keybd_event(byte bvk, byte bScan, int dwFlags, int dwExtraInfo);
+
+    
+    [DllImport("user32.dll")]
+    private static extern bool BringWindowToTop(IntPtr hWnd);
+
+    //[DllImport("User32.dll", EntryPoint = "SendMessage")]
+    //private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, string lParam);
+
+    [DllImport("User32.dll", EntryPoint = "PostMessage")]
+    private static extern int PostMessage(IntPtr hWnd, int Msg, int wParam, string lParam);
+
+    [DllImport("user32.dll", EntryPoint = "SendMessageA")]
+    private static extern int SendMessage(
+
+ IntPtr hWnd,　　　// handle to destination window
+
+           int Msg,　　　 // message
+
+           uint wParam,　// first message parameter
+
+           uint lParam // second message parameter
+
+     );
 }

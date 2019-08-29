@@ -14,6 +14,7 @@ public class Test : MonoBehaviour
    
     void Start()
     {
+        AutoJob.BringWindowToTop("此电脑");
         UnityEngine.Application.targetFrameRate = 30;
         //AutoJob jump = new AutoJob();
         //jump.Job = delegate ()
@@ -23,37 +24,64 @@ public class Test : MonoBehaviour
         //jump.Run();
 
         AutoJob jump = new AutoJob();
+        //jump.RandomMin = 1;
+        //jump.RandomMax = 2;
         jump.Job = delegate ()
         {
             AutoJob.ClickKey(KeyCode.Space);
         };
         jump.Run();
 
+        AutoJob aaa = new AutoJob();
+        aaa.RandomMin = 30;
+        aaa.RandomMax = 40;
+        aaa.Job = delegate ()
+        {
+            AutoJob.ClickKey(KeyCode.Alpha5);
+        };
+        aaa.Run();
+
+
+
         AutoJob attack = new AutoJob();
         attack.RandomMin = 0.5f;
         attack.RandomMax = 1f;
         attack.Job = delegate ()
         {
-            AutoJob.ClickKey(KeyCode.Alpha2);
+            AutoJob.ClickKey(KeyCode.Alpha6);
         };
         attack.Run();
 
-        AutoJob loot = new AutoJob();
-        loot.RandomMin = 1f;
-        loot.RandomMax = 2f;
-        loot.Job = delegate ()
-        {
+        //AutoJob skillX = new AutoJob();
+        //skillX.RandomMin = 10f;
+        //skillX.RandomMax = 12f;
+        //skillX.Job = delegate ()
+        //{
+        //    AutoJob.mouse_event((int)AutoJob.MouseEventFlag.LeftDown, 0, 0, 0, 0);
+        //    AutoJob.mouse_event((int)AutoJob.MouseEventFlag.LeftUp, 0, 0, 0, 0);
+        //    AutoJob.mouse_event((int)AutoJob.MouseEventFlag.LeftDown, 0, 0, 0, 0);
+        //    AutoJob.mouse_event((int)AutoJob.MouseEventFlag.LeftUp, 0, 0, 0, 0);
+        //    //AutoJob.ClickKey(KeyCode.Mouse0);
+        //    //AutoJob.ClickKey(KeyCode.Mouse0);
+        //};
+        //skillX.Run();
 
-            for (int i = -400; i < 400; i += 20)
-            {
-                for (int j = -400; j < 400; j += 20)
-                {
-                    AutoJob.SetCursorPos(1920/2 + i, 1080 / 2 + j);
-                    AutoJob.ClickKey(KeyCode.Mouse1);
-                }
-            }
-        };
-        loot.Run();
+        //AutoJob loot = new AutoJob();
+        //loot.RandomMin = 60f;
+        //loot.RandomMax = 80f;
+        //loot.Job = delegate ()
+        //{
+        //    for (int i = -400; i < 400; i += 20)
+        //    {
+        //        for (int j = -400; j < 400; j += 20)
+        //        {
+        //            AutoJob.SetCursorPos(1920 / 2 + i, 1080 / 2 + j);
+        //            AutoJob.mouse_event((int)AutoJob.MouseEventFlag.RightDown, 0, 0, 0, 0);
+        //            AutoJob.mouse_event((int)AutoJob.MouseEventFlag.RightUp, 0, 0, 0, 0);
+        //        }
+        //    }
+        //};
+        //loot.Run();
 
     }
 }
