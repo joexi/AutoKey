@@ -121,15 +121,5 @@ public class AutoJob {
     private static extern int PostMessage(IntPtr hWnd, int Msg, int wParam, string lParam);
 
     [DllImport("user32.dll", EntryPoint = "SendMessageA")]
-    private static extern int SendMessage(
-
- IntPtr hWnd,　　　// handle to destination window
-
-           int Msg,　　　 // message
-
-           uint wParam,　// first message parameter
-
-           uint lParam // second message parameter
-
-     );
+    private static extern int SendMessage(IntPtr hWnd, int Msg, uint wParam, uint lParam);
 }
