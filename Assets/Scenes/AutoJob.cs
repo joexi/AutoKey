@@ -62,14 +62,41 @@ public class AutoJob {
 
     const int WM_KEYDOWN = 0x100;
     const int WM_KEYUP = 0x101;
-    public static void ClickKey(KeyCode code)
+    const int WM_RBUTTONDOWN = 0x0204;
+    const int WM_RBUTTONUP = 0x0205;
+    const int WM_MOUSEMOVE = 0x0200;
+    public static void ClickKey(KeyCode code, string win = "魔兽世界")
     {
 
-        IntPtr myIntPtr = FindWindow(null, "魔兽世界");
+        IntPtr myIntPtr = FindWindow(null, win);
         Debug.LogError(myIntPtr);
         SendMessage(myIntPtr, WM_KEYDOWN, (uint)code, 0);
         System.Threading.Thread.Sleep(100 + UnityEngine.Random.Range(20, 100));
         SendMessage(myIntPtr, WM_KEYUP, (uint)code, 0);
+        //Keybd_event((byte)code, 0, 0, 0);
+        //Keybd_event((byte)code, 0, 2, 0);
+    }
+
+    static int rand = 0;
+    public static void ClickMouse()
+    {
+        IntPtr myIntPtr = FindWindow(null, "魔兽世界");
+        RECT r = new RECT();
+        GetWindowRect(myIntPtr, ref r);
+        int x = (r.Left + r.Right) / 2;
+        int y = (r.Top + r.Bottom) / 2;
+        rand = rand % 81;
+        rand ++;
+        x += (rand % 9 * 30 - 120);
+        y += (rand / 9 * 30 - 120);
+        Debug.LogError(x + " " + y);
+        uint result = (uint)(x << 16 + y);
+        SetCursorPos(x, y);
+       // SendMessage(myIntPtr, WM_MOUSEMOVE, result, 0);
+        System.Threading.Thread.Sleep(100 + UnityEngine.Random.Range(20, 100));
+        SendMessage(myIntPtr, WM_RBUTTONDOWN, 0, 0);
+        System.Threading.Thread.Sleep(100 + UnityEngine.Random.Range(20, 100));
+        SendMessage(myIntPtr, WM_RBUTTONUP, 0, 0);
         //Keybd_event((byte)code, 0, 0, 0);
         //Keybd_event((byte)code, 0, 2, 0);
     }
@@ -122,4 +149,17 @@ public class AutoJob {
 
     [DllImport("user32.dll", EntryPoint = "SendMessageA")]
     private static extern int SendMessage(IntPtr hWnd, int Msg, uint wParam, uint lParam);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    static extern bool GetWindowRect(IntPtr hWnd, ref RECT lpRect);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RECT
+    {
+        public int Left; //最左坐标
+        public int Top; //最上坐标
+        public int Right; //最右坐标
+        public int Bottom; //最下坐标
+    }
 }
