@@ -9,13 +9,14 @@ public class Test : MonoBehaviour
     private AutoJob loot;
     private AutoJob attack;
     private AutoJob jump;
+    private AutoJob attack2;
     void Start()
     {
         UnityEngine.Application.targetFrameRate = 30;
         jump = new AutoJob();
         jump.Job = delegate ()
         {
-            AutoJob.SetCursorPos(1920 / 2, 1080 / 2);
+            AutoJob.ClickKey(KeyCode.Space);
         };
         jump.Run();
 
@@ -36,6 +37,15 @@ public class Test : MonoBehaviour
             AutoJob.ClickKey(KeyCode.Alpha6);
         };
         attack.Run();
+
+        attack2 = new AutoJob();
+        attack2.RandomMin = 30f;
+        attack2.RandomMax = 50f;
+        attack2.Job = delegate ()
+        {
+            AutoJob.ClickKey(KeyCode.Alpha5);
+        };
+        attack2.Run();
     }
 
     private void OnGUI()
@@ -49,6 +59,7 @@ public class Test : MonoBehaviour
         }
         loot.Active = GUILayout.Toggle(loot.Active, "拾取");
         attack.Active = GUILayout.Toggle(attack.Active, "自动战斗");
+        attack2.Active = attack.Active;
         jump.Active = GUILayout.Toggle(jump.Active, "防暂离");
         
 
