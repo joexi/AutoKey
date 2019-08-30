@@ -10,11 +10,15 @@ public class AutoJob {
     public bool IfShow = false;
     public bool IfHide = false;
     public Action Job;
+    public bool Active = true;
     public float RandomMax = 10;
     public float RandomMin = 18;
 
     private float timeInterval;
     public void Update() {
+        if (!Active) {
+            return;
+        }
         timeInterval -= Time.deltaTime;
         if (timeInterval <= 0) {
             timeInterval = UnityEngine.Random.Range(RandomMin, RandomMax);
@@ -67,14 +71,10 @@ public class AutoJob {
     const int WM_MOUSEMOVE = 0x0200;
     public static void ClickKey(KeyCode code, string win = "魔兽世界")
     {
-
         IntPtr myIntPtr = FindWindow(null, win);
-        Debug.LogError(myIntPtr);
         SendMessage(myIntPtr, WM_KEYDOWN, (uint)code, 0);
         System.Threading.Thread.Sleep(100 + UnityEngine.Random.Range(20, 100));
         SendMessage(myIntPtr, WM_KEYUP, (uint)code, 0);
-        //Keybd_event((byte)code, 0, 0, 0);
-        //Keybd_event((byte)code, 0, 2, 0);
     }
 
     static int rand = 0;
@@ -89,7 +89,7 @@ public class AutoJob {
         rand ++;
         x += (rand % 9 * 30 - 120);
         y += (rand / 9 * 30 - 120);
-        Debug.LogError(x + " " + y);
+       // Debug.LogError(x + " " + y);
         uint result = (uint)(x << 16 + y);
         SetCursorPos(x, y);
        // SendMessage(myIntPtr, WM_MOUSEMOVE, result, 0);

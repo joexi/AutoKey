@@ -16,7 +16,7 @@ public class AutoJobPool : MonoBehaviour {
         }
     }
     public List<AutoJob> JobList = new List<AutoJob>();
-
+    public bool Running = false;
     public void AddJob(AutoJob job) {
         if (!JobList.Contains(job)) {
             JobList.Add(job);
@@ -30,8 +30,11 @@ public class AutoJobPool : MonoBehaviour {
 
     private void Update()
     {
-        for (int i = 0; i < JobList.Count; i++) {
-            JobList[i].Update();
+        if (Running) {
+            for (int i = 0; i < JobList.Count; i++)
+            {
+                JobList[i].Update();
+            }
         }
     }
 }
