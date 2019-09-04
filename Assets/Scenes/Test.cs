@@ -8,8 +8,12 @@ public class Test : MonoBehaviour
 {
     private AutoJob loot;
     private AutoJob attack;
-    private AutoJob jump;
     private AutoJob attack2;
+    private AutoJob attack3;
+    private AutoJob attack4;
+    private AutoJob selectTarget;
+    private AutoJob jump;
+    private float MouseMoveTime = 0;
     void Start()
     {
         UnityEngine.Application.targetFrameRate = 30;
@@ -21,54 +25,98 @@ public class Test : MonoBehaviour
         jump.Run();
 
         loot = new AutoJob();
-        loot.RandomMin = 2;
-        loot.RandomMax = 3;
+        loot.RandomValue = 5;
         loot.Job = delegate ()
         {
-            AutoJob.ClickMouse();
+            if (MouseMoveTime <= 0) {
+                AutoJob.Loot();
+            }
         };
         loot.Run();
 
         attack = new AutoJob();
-        attack.RandomMin = 0.5f;
-        attack.RandomMax = 1f;
+        attack.RandomValue = 60f;
         attack.Job = delegate ()
         {
-            AutoJob.ClickKey(KeyCode.Alpha6);
+            AutoJob.ClickKey(KeyCode.Alpha5);
         };
         attack.Run();
 
         attack2 = new AutoJob();
-        attack2.RandomMin = 30f;
-        attack2.RandomMax = 50f;
+        attack2.RandomValue = 2f;
         attack2.Job = delegate ()
         {
-            AutoJob.ClickKey(KeyCode.Alpha5);
+            AutoJob.ClickKey(KeyCode.Alpha6);
         };
         attack2.Run();
+
+        attack3 = new AutoJob();
+        attack3.RandomValue = 60f;
+        attack3.Job = delegate ()
+        {
+            AutoJob.ClickKey(KeyCode.Alpha7);
+        };
+        attack3.Run();
+
+        attack4 = new AutoJob();
+        attack4.RandomValue = 60f;
+        attack4.Job = delegate ()
+        {
+            AutoJob.ClickKey(KeyCode.Alpha8);
+        };
+        attack4.Run();
+
+
+        selectTarget = new AutoJob();
+        selectTarget.RandomValue = 0f;
+        selectTarget.Job = delegate ()
+        {
+            AutoJob.SelectTarget();
+        };
+        selectTarget.Run();
+
     }
 
     private void OnGUI()
     {
         if (AutoJobPool.Instance.Running)
         {
-            GUILayout.Label("按F12停止");
+            if (GUILayout.Button("点击停止"))
+            {
+                AutoJobPool.Instance.Running = false;
+            }
         }
-        else {
-            GUILayout.Label("按F12开启");
+        else
+        {
+            if (GUILayout.Button("点击开始"))
+            {
+                AutoJobPool.Instance.Running = true;
+            }
         }
-        loot.Active = GUILayout.Toggle(loot.Active, "拾取");
-        attack.Active = GUILayout.Toggle(attack.Active, "自动战斗");
-        attack2.Active = attack.Active;
-        jump.Active = GUILayout.Toggle(jump.Active, "防暂离");
-        
 
+        loot.Active = GUILayout.Toggle(loot.Active, "拾取");
+        ShowField("技能5:", attack);
+        ShowField("技能6:", attack2);
+        ShowField("技能7:", attack3);
+        ShowField("技能8:", attack4);
+        ShowField("跳跃间隔:", jump);
+        ShowField("选目标间隔:", selectTarget);
+
+       // if()
     }
+
+    private void ShowField(string label, AutoJob job) {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label(label);
+        string str = GUILayout.TextField(job.RandomValue.ToString());
+        int time = 0;
+        int.TryParse(str, out time);
+        job.RandomValue = time;
+        GUILayout.EndHorizontal();
+    }
+
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.F12))
-        {
-            AutoJobPool.Instance.Running = !AutoJobPool.Instance.Running;
-        }
+
     }
 }

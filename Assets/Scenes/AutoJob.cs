@@ -11,17 +11,16 @@ public class AutoJob {
     public bool IfHide = false;
     public Action Job;
     public bool Active = true;
-    public float RandomMax = 10;
-    public float RandomMin = 18;
+    public float RandomValue = 10;
 
     private float timeInterval;
     public void Update() {
-        if (!Active) {
+        if (!Active || this.RandomValue == 0) {
             return;
         }
         timeInterval -= Time.deltaTime;
         if (timeInterval <= 0) {
-            timeInterval = UnityEngine.Random.Range(RandomMin, RandomMax);
+            timeInterval = UnityEngine.Random.Range(RandomValue * 1.3f, RandomValue * 0.7f);
             this.Invoke();
         }
     }
@@ -48,7 +47,6 @@ public class AutoJob {
     void ActiveWindow()
     {
         IntPtr myIntPtr = FindWindow(null, this.WindowName);
-        Debug.LogError(myIntPtr + " " + this.WindowName);
         SetForegroundWindow(myIntPtr);
     }
 
@@ -77,28 +75,59 @@ public class AutoJob {
         SendMessage(myIntPtr, WM_KEYUP, (uint)code, 0);
     }
 
+    public static void SelectTarget(string win = "魔兽世界")
+    {
+        IntPtr myIntPtr = FindWindow(null, win);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.KeypadEnter, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.KeypadEnter, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)47, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)47, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.S, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.S, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.T, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.T, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.A, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.A, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.R, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.R, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.T, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.T, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.A, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.A, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.T, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.T, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.T, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.T, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.A, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.A, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.C, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.C, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.K, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.K, 0);
+        SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.KeypadEnter, 0);
+        SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.KeypadEnter, 0);
+    }
+
     static int rand = 0;
-    public static void ClickMouse()
+    public static void Loot()
     {
         IntPtr myIntPtr = FindWindow(null, "魔兽世界");
         RECT r = new RECT();
         GetWindowRect(myIntPtr, ref r);
         int x = (r.Left + r.Right) / 2;
         int y = (r.Top + r.Bottom) / 2;
-        rand = rand % 81;
+        rand = rand % 50;
         rand ++;
         x += (rand % 9 * 30 - 120);
         y += (rand / 9 * 30 - 120);
-       // Debug.LogError(x + " " + y);
+        x += UnityEngine.Random.Range(-5, 5);
+        y += UnityEngine.Random.Range(-5, 5);
         uint result = (uint)(x << 16 + y);
         SetCursorPos(x, y);
-       // SendMessage(myIntPtr, WM_MOUSEMOVE, result, 0);
         System.Threading.Thread.Sleep(100 + UnityEngine.Random.Range(20, 100));
         SendMessage(myIntPtr, WM_RBUTTONDOWN, 0, 0);
         System.Threading.Thread.Sleep(100 + UnityEngine.Random.Range(20, 100));
         SendMessage(myIntPtr, WM_RBUTTONUP, 0, 0);
-        //Keybd_event((byte)code, 0, 0, 0);
-        //Keybd_event((byte)code, 0, 2, 0);
     }
 
     [Flags]
