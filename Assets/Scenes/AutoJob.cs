@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 public class AutoJob {
-    public string WindowName = "魔兽世界";
+    public static string WindowName = "魔兽世界";
     public bool IfShow = false;
     public bool IfHide = false;
     public Action Job;
@@ -20,7 +20,7 @@ public class AutoJob {
         }
         timeInterval -= Time.deltaTime;
         if (timeInterval <= 0) {
-            timeInterval = UnityEngine.Random.Range(RandomValue * 1.3f, RandomValue * 0.7f);
+            timeInterval = UnityEngine.Random.Range(RandomValue * 0.7f, RandomValue * 1.3f);
             this.Invoke();
         }
     }
@@ -44,15 +44,20 @@ public class AutoJob {
         }
     }
 
+    public static void FindWindow() {
+        IntPtr myIntPtr = FindWindow(null, "魔兽世界");
+        SetWindowText((int)myIntPtr, WindowName);
+    }
+
     void ActiveWindow()
     {
-        IntPtr myIntPtr = FindWindow(null, this.WindowName);
+        IntPtr myIntPtr = FindWindow(null, WindowName);
         SetForegroundWindow(myIntPtr);
     }
 
     void HideWindow()
     {
-        IntPtr myIntPtr = FindWindow(null, this.WindowName);
+        IntPtr myIntPtr = FindWindow(null, WindowName);
         ShowWindow(myIntPtr, 2);
     }
 
@@ -67,17 +72,17 @@ public class AutoJob {
     const int WM_RBUTTONDOWN = 0x0204;
     const int WM_RBUTTONUP = 0x0205;
     const int WM_MOUSEMOVE = 0x0200;
-    public static void ClickKey(KeyCode code, string win = "魔兽世界")
+    public static void ClickKey(KeyCode code)
     {
-        IntPtr myIntPtr = FindWindow(null, win);
+        IntPtr myIntPtr = FindWindow(null, WindowName);
         SendMessage(myIntPtr, WM_KEYDOWN, (uint)code, 0);
         System.Threading.Thread.Sleep(100 + UnityEngine.Random.Range(20, 100));
         SendMessage(myIntPtr, WM_KEYUP, (uint)code, 0);
     }
 
-    public static void SelectTarget(string win = "魔兽世界")
+    public static void SelectTarget()
     {
-        IntPtr myIntPtr = FindWindow(null, win);
+        IntPtr myIntPtr = FindWindow(null, WindowName);
         SendMessage(myIntPtr, WM_KEYDOWN, (uint)KeyCode.KeypadEnter, 0);
         SendMessage(myIntPtr, WM_KEYUP, (uint)KeyCode.KeypadEnter, 0);
         SendMessage(myIntPtr, WM_KEYDOWN, (uint)47, 0);
@@ -111,7 +116,8 @@ public class AutoJob {
     static int rand = 0;
     public static void Loot()
     {
-        IntPtr myIntPtr = FindWindow(null, "魔兽世界");
+        IntPtr myIntPtr = FindWindow(null, WindowName);
+        
         RECT r = new RECT();
         GetWindowRect(myIntPtr, ref r);
         int x = (r.Left + r.Right) / 2;
@@ -182,6 +188,9 @@ public class AutoJob {
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     static extern bool GetWindowRect(IntPtr hWnd, ref RECT lpRect);
+
+    [DllImport("user32.dll", EntryPoint = "SetWindowText", CharSet = CharSet.Ansi)]
+    public static extern int SetWindowText(int hwnd, string lpString);
 
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT
