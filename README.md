@@ -18,9 +18,14 @@
 
 ### 寻找目标宏
   功能：找XXXX没找到就找YYYY
+  
+``` lua
 /target XXXX;
 /stopmacro [@target, exsits, nodead]
 /target YYYY;
+```
 
 ### 释放技能宏
+``` lua
 /castsequence reset=30/combat/ XXXX,XXXX,XXXX
+```
