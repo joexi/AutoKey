@@ -125,8 +125,8 @@ public class Test : MonoBehaviour
         GUILayout.BeginHorizontal();
         GUILayout.Label(label);
         string str = GUILayout.TextField(job.RandomValue.ToString());
-        int time = 0;
-        int.TryParse(str, out time);
+        float time = 0;
+        float.TryParse(str, out time);
         job.RandomValue = time;
         GUILayout.EndHorizontal();
     }
