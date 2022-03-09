@@ -12,7 +12,8 @@ public class AutoJob {
     public Action Job;
     public bool Active = true;
     public float RandomValue = 10;
-
+    public KeyCode Key;
+    public List<AutoJob> ChildJobs = new List<AutoJob>();
     private float timeInterval;
     public void Update() {
         if (!Active || this.RandomValue == 0) {
@@ -41,6 +42,9 @@ public class AutoJob {
         if (IfHide)
         {
             HideWindow();
+        }
+        foreach (var job in ChildJobs) {
+            job.Invoke();
         }
     }
 
