@@ -17,6 +17,7 @@ public class AutoJobPool : MonoBehaviour {
     }
     public List<AutoJob> JobList = new List<AutoJob>();
     public bool Running = false;
+    public bool AFK = false;
     public void AddJob(AutoJob job) {
         if (!JobList.Contains(job)) {
             JobList.Add(job);

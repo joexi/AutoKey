@@ -80,6 +80,7 @@ public class AutoJob {
         SendMessage(myIntPtr, WM_KEYUP, (uint)code, 0);
     }
 
+
     public static void SelectTarget()
     {
         IntPtr myIntPtr = FindWindow(null, WindowName);

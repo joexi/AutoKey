@@ -83,12 +83,32 @@ public class Test : MonoBehaviour
         {
             AutoJob.ClickKey(KeyCode.Alpha0);
         };
-        attack6.Run();
 
+        var afk = new AutoJob();
+        afk.RandomValue = 500;
+        afk.Job = delegate ()
+        {
+            AutoJob.ClickKey(KeyCode.Alpha8);
+        };
+        afk.Run();
+
+        var afk2 = new AutoJob();
+        afk2.RandomValue = 120f;
+        afk2.Job = delegate ()
+        {
+            AutoJob.ClickKey(KeyCode.Return);
+            AutoJob.ClickKey(KeyCode.Return);
+        };
+        afk2.Run();
     }
 
     private void OnGUI()
     {
+        if (GUILayout.Button("Test"))
+        {
+            AutoJob.ClickKey(KeyCode.Return);
+        }
+
         if (AutoJobPool.Instance.Running)
         {
             if (GUILayout.Button("点击停止"))
@@ -101,6 +121,21 @@ public class Test : MonoBehaviour
             if (GUILayout.Button("点击开始"))
             {
                 AutoJobPool.Instance.Running = true;
+            }
+        }
+
+        if (!AutoJobPool.Instance.AFK)
+        {
+            if (GUILayout.Button("点击防暂离"))
+            {
+                AutoJobPool.Instance.AFK = true;
+            }
+        }
+        else
+        {
+            if (GUILayout.Button("结束防暂离"))
+            {
+                AutoJobPool.Instance.AFK = false;
             }
         }
         GUILayout.BeginHorizontal();
