@@ -29,7 +29,7 @@
   
 ``` lua
 /target XXXX;
-/stopmacro [@target, exsits, nodead]
+/stopmacro [@target, exists, nodead]
 /target YYYY;
 ```
 
